@@ -4,7 +4,7 @@
  * @head: stack head double pointer
  * @counter: Line number
  * Return: void
-*/
+ */
 void f_add(stack_t **head, unsigned int counter)
 {
 	stack_t *h;
