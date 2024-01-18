@@ -1,64 +1,42 @@
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
 #include "monty.h"
 
 /**
- * mod - computes the remainder of the division
- * @stack: stack given by main
- * @line_cnt: line counter
- *
+ * f_mod - computes the rest of the division of the second
+ * top element of stack by the top element
+ * @head: double pointer to stack head
+ * @counter: line count
  * Return: void
- */
-void mod(stack_t **stack, unsigned int line_cnt)
+*/
+void f_mod(stack_t **head, unsigned int counter)
 {
-	int result;
+	stack_t *h;
+	int length = 0, aux;
 
-	if (!stack || !*stack || !((*stack)->next))
+	h = *head;
+	while (h)
 	{
-		fprintf(stderr, "L%d: can't mod, stack too short\n", line_cnt);
-		status = EXIT_FAILURE;
-		return;
+		h = h->next;
+		length++;
 	}
-	if (((*stack)->n) == 0)
+	if (length < 2)
 	{
-		fprintf(stderr, "L%d: division by zero\n", line_cnt);
-		status = EXIT_FAILURE;
-		return;
+		fprintf(stderr, "L%d: can't mod, stack too short\n", counter);
+		fclose(bus.file);
+		free(bus.content);
+		free_stack(*head);
+		exit(EXIT_FAILURE);
 	}
-
-	result = ((*stack)->next->n) % ((*stack)->n);
-	pop(stack, line_cnt);/*For top node*/
-	(*stack)->n = result;
-}
-
-#include <stdio.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <string.h>
-#include "monty.h"
-
-/**
- * pchar - prints the int at the top of the stack as char
- * @stack: stack given by main
- * @line_cnt: ammount of lines
- *
- * Return: void
- */
-void pchar(stack_t **stack, unsigned int line_cnt)
-{
-	if (!stack || !(*stack))
+	h = *head;
+	if (h->n == 0)
 	{
-		fprintf(stderr, "L%d: can't pchar, stack empty\n", line_cnt);
-		status = EXIT_FAILURE;
-		return;
+		fprintf(stderr, "L%d: division by zero\n", counter);
+		fclose(bus.file);
+		free(bus.content);
+		free_stack(*head);
+		exit(EXIT_FAILURE);
 	}
-	if (isascii((*stack)->n) == 0)
-	{
-		fprintf(stderr, "L%d: can't pchar, value out of range\n", line_cnt);
-		status = EXIT_FAILURE;
-		return;
-	}
-	printf("%c\n", (*stack)->n);
+	aux = h->next->n % h->n;
+	h->next->n = aux;
+	*head = h->next;
+	free(h);
 }
